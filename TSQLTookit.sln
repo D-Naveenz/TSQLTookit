@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35506.116 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSQLTookit", "TSQLTookit\TSQLTookit.csproj", "{AABA5378-767A-4325-85DD-C7D7E40E4C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSQLTookit.Test", "TSQLTookit.Test\TSQLTookit.Test.csproj", "{68C0BC1F-F394-478F-A5A5-00B454B7FBF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AABA5378-767A-4325-85DD-C7D7E40E4C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AABA5378-767A-4325-85DD-C7D7E40E4C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AABA5378-767A-4325-85DD-C7D7E40E4C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68C0BC1F-F394-478F-A5A5-00B454B7FBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68C0BC1F-F394-478F-A5A5-00B454B7FBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68C0BC1F-F394-478F-A5A5-00B454B7FBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68C0BC1F-F394-478F-A5A5-00B454B7FBF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
