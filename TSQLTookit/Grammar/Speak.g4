@@ -25,3 +25,4 @@ WORD                : (LOWERCASE | UPPERCASE)+ ;
 TEXT                : '"' .*? '"' ;
 WHITESPACE          : (' '|'\t')+ -> skip ;
 NEWLINE             : ('\r'? '\n' | '\r')+ ;
+sdsfbsrg;
