@@ -89,6 +89,9 @@ class Antlr {
     }
 
     [void] build() {
+        # Cleanup the Grammar directory
+        $this.Cleanup()
+        
         # Get the list of grammar files
         $grammarFiles = Get-ChildItem -Path $this.GrammarLocation -Filter *.g4
 
