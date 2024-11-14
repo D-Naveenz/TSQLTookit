@@ -74,7 +74,7 @@ public class GrammarBuilderService(ILogger<GrammarBuilderService> logger, IOptio
             var outputDir = Path.Combine(GrammarLocation, grammarName);
             Directory.CreateDirectory(outputDir);
 
-            Console.WriteLine($"Generating parser for: {grammarName}");
+            logger.LogInformation("Generating parser for: {GrammarName}", Path.GetFileName(grammarFile));
             await RunAntlrToolAsync(grammarFile, outputDir);
         }
     }
@@ -91,7 +91,7 @@ public class GrammarBuilderService(ILogger<GrammarBuilderService> logger, IOptio
         }
         Directory.CreateDirectory(outputDir);
 
-        Console.WriteLine($"Generating parser for: {grammarName}");
+        logger.LogInformation("Generating parser for: {GrammarName}", Path.GetFileName(grammarPath));
         await RunAntlrToolAsync(grammarPath, outputDir);
     }
 
@@ -134,11 +134,11 @@ public class GrammarBuilderService(ILogger<GrammarBuilderService> logger, IOptio
 
             if (majorVersion >= requiredVersion)
             {
-                logger.LogInformation($"Java version {version} is supported.");
+                logger.LogInformation("Java version {Version} is supported.", version);
                 return;
             }
 
-            logger.LogError($"Java version {version} is not supported. Version {requiredVersion} or higher is required.");
+            logger.LogError("Java version {Version} is not supported. Version {RequiredVersion} or higher is required.", version, requiredVersion);
             hostApplicationLifetime.StopApplication();
         }
         catch
@@ -195,10 +195,9 @@ public class GrammarBuilderService(ILogger<GrammarBuilderService> logger, IOptio
         string error = await process.StandardError.ReadToEndAsync();
         process.WaitForExit();
 
-        logger.LogInformation(output);
         if (!string.IsNullOrEmpty(error))
         {
-            logger.LogError(error);
+            logger.LogError("ANTLR Error: {Error}", error);
         }
     }
 }

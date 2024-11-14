@@ -9,6 +9,7 @@ namespace TSQLToolkit.ANTLREngine.Services
     {
         private readonly WatcherSettings _settings = settings.Value;
         private FileSystemWatcher? _watcher;
+        private DateTime _lastChange = DateTime.MinValue;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -30,14 +31,8 @@ namespace TSQLToolkit.ANTLREngine.Services
             _watcher.Created += OnChangedAsync;
             _watcher.Deleted += OnDeleted;
 
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
-                await Task.Delay(1000, stoppingToken);
-            }
+            // Keep the service running
+            await Task.Delay(Timeout.Infinite, stoppingToken);
         }
 
         public override void Dispose()
@@ -59,18 +54,40 @@ namespace TSQLToolkit.ANTLREngine.Services
 
         private async void OnChangedAsync(object sender, FileSystemEventArgs e)
         {
-            logger.LogInformation("File: {fileName} {changeType}", e.Name, e.ChangeType);
+            try
+            {
+                var lastWriteTime = File.GetLastWriteTime(e.FullPath);
+                if (lastWriteTime != _lastChange)
+                {
+                    _lastChange = lastWriteTime;
+                    logger.LogInformation("File: {fileName} {changeType}", e.Name, e.ChangeType);
 
-            // Build the grammar
-            await grammarBuilderService.BuildAsync(e.FullPath);
+                    // Build the grammar
+                    await grammarBuilderService.BuildAsync(e.FullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing file: {fileName}", e.Name);
+            }
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            logger.LogInformation("File: {fileName} {changeType}", e.Name, e.ChangeType);
+            try
+            {
+                if (!File.Exists(e.FullPath))
+                {
+                    logger.LogInformation("File: {fileName} {changeType}", e.Name, e.ChangeType);
 
-            // Cleanup the grammar
-            grammarBuilderService.Cleanup(e.FullPath);
+                    // Cleanup the grammar
+                    grammarBuilderService.Cleanup(e.FullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing file: {fileName}", e.Name);
+            }
         }
     }
 }
